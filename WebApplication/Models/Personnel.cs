@@ -17,8 +17,10 @@ namespace WebApplication.Models
         public DateTime JoinedDate { get; set; }
         public int WorkingHours { get; set; }
         public int GrossIncome { get; set; }
+        public string Department { get; set; }
 
-        public Personnel (int personnelId, string name, string surname, DateTime birthdate, string birthPlace, string adress, string zipCode, DateTime joinedDate, int workingHours, int grossIncome)
+
+        public Personnel(int personnelId, string name, string surname, DateTime birthdate, string birthPlace, string adress, string zipCode, DateTime joinedDate, int workingHours, int grossIncome, string department)
         {
             this.PersonnelId = personnelId;
             this.Name = name;
@@ -30,10 +32,7 @@ namespace WebApplication.Models
             this.JoinedDate = joinedDate;
             this.WorkingHours = workingHours;
             this.GrossIncome = grossIncome;
-        }
-        public Personnel()
-        {
-
+            this.Department = department;
         }
     }
 }
