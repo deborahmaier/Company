@@ -25,6 +25,11 @@ namespace WebApplication.Controllers
             _config = config;
             _webHostEnvironment = webHostEnvironment;
         }
+
+        public PersonnelController()
+        {
+        }
+
         [HttpGet]
         public JsonResult Get()
         {
@@ -47,6 +52,7 @@ namespace WebApplication.Controllers
             }
             return new JsonResult(dt);
         }
+        
         [HttpPost]
         public JsonResult Post(Personnel per)
         {
@@ -117,6 +123,7 @@ namespace WebApplication.Controllers
             }
             return new JsonResult("Updated Successfully");
         }
+        
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
