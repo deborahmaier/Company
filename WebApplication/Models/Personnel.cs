@@ -36,23 +36,6 @@ namespace WebApplication.Models
             this.Salaries = new List<Salary>();
         }            
         
-        //public static DataTable createDataTable()
-        //{
-        //    DataTable dt = new DataTable();
-        //    foreach (DataGridViewColumn column in dataGridView1.Columns)
-        //    {
-        //        dt.Columns.Add(column.HeaderText, column.ValueType);
-        //    }
-        //    foreach (DataGridViewRow row in dataGridView1.Rows)
-        //    {
-        //        dt.Rows.Add();
-        //        foreach (DataGridViewCell cell in row.Cells)
-        //        {
-        //            dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
-        //        }
-        //    }
-        //    return dt;
-        //}
 
         public void Add(Salary salary)
         {
