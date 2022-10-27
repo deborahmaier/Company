@@ -42,6 +42,7 @@ namespace WebApplication.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Personnel personnel)
         {
+
             if (personnel == null)
             {
                 return BadRequest("Parameter Personnel is required");

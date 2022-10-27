@@ -4,6 +4,10 @@ namespace WebApplication.Models
 {
     public class Salary
     {
+        public Salary()
+        {
+        }
+
         public Salary(int salaryId, double grossIncome, int month, int year)
         {
             SalaryId = salaryId;
@@ -34,9 +38,10 @@ namespace WebApplication.Models
 
             foreach(SalaryItem salaryItem in SalaryItems)
             {
-                if(salaryItem.Tax.TaxType.Equals("1"))
-                
-                aux += salaryItem.Amount;
+                if(salaryItem.Tax.TaxType.Equals("r"))
+                    aux -= salaryItem.Amount;
+                if (salaryItem.Tax.TaxType.Equals("CNR") || salaryItem.Tax.TaxType.Equals("CR"))
+                    aux += salaryItem.Amount;
             }
             return GrossIncome - aux;
 

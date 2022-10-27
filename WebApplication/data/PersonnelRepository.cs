@@ -22,8 +22,8 @@ namespace WebApplication.data
             int rows = 0;
             string query = @"
                              insert into dbo.Personnel 
-                             (Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkHours,GrossIncome, Department)
-                             values (@Name, @Surname, @Birthdate, @Adress, @ZipCode, @JoinedDate, @WorkingHours, @GrossIncome, @Department)";
+                             (Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkHours, Department)
+                             values (@Name, @Surname, @Birthdate, @Adress, @ZipCode, @JoinedDate, @WorkingHours, @Department)";
 
             //string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
             string sqlDataSource = connectionString;
@@ -40,7 +40,6 @@ namespace WebApplication.data
                     myCommand.Parameters.AddWithValue("@ZipCode", oPersonnel.ZipCode);
                     myCommand.Parameters.AddWithValue("@JoinedDate", oPersonnel.JoinedDate);
                     myCommand.Parameters.AddWithValue("@WorkingHours", oPersonnel.WorkingHours);
-
                     myCommand.Parameters.AddWithValue("@Department", oPersonnel.Department);
                     rows = myCommand.ExecuteNonQuery();
 
@@ -149,7 +148,33 @@ namespace WebApplication.data
 
         public bool Update(Personnel oPersonnel)
         {
-            throw new NotImplementedException();
+
+            int rows = 0;
+            string query = @"
+                             UPDATE dbo.Personnel SET Name = @Name, Surname = @Surname , Birthdate = @Birthdate, Adress = @Adress
+                                ,ZipCode = @ZipCode, JoinedDate = @JoinedDate , WorkHours = @WorkingHours, Department = @Department)";
+
+            //string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
+            string sqlDataSource = connectionString;
+            SqlDataReader myReader;
+            using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+            {
+                myConn.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                {
+                    myCommand.Parameters.AddWithValue("@Name", oPersonnel.Name);
+                    myCommand.Parameters.AddWithValue("@Surname", oPersonnel.Surname);
+                    myCommand.Parameters.AddWithValue("@Birthdate", oPersonnel.Birthdate);
+                    myCommand.Parameters.AddWithValue("@Adress", oPersonnel.Adress);
+                    myCommand.Parameters.AddWithValue("@ZipCode", oPersonnel.ZipCode);
+                    myCommand.Parameters.AddWithValue("@JoinedDate", oPersonnel.JoinedDate);
+                    myCommand.Parameters.AddWithValue("@WorkingHours", oPersonnel.WorkingHours);
+                    myCommand.Parameters.AddWithValue("@Department", oPersonnel.Department);
+                    rows = myCommand.ExecuteNonQuery();
+
+                }
+            }
+            return rows == 1;
         }
     }
 }
