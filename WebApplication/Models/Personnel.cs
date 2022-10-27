@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
@@ -16,11 +17,12 @@ namespace WebApplication.Models
         public string ZipCode { get; set; }
         public DateTime JoinedDate { get; set; }
         public int WorkingHours { get; set; }
-        public int GrossIncome { get; set; }
         public string Department { get; set; }
 
+        public List<Salary> Salaries { get; set; }
 
-        public Personnel(int personnelId, string name, string surname, DateTime birthdate, string adress, string zipCode, DateTime joinedDate, int workingHours, int grossIncome, string department)
+
+        public Personnel(int personnelId, string name, string surname, DateTime birthdate, string adress, string zipCode, DateTime joinedDate, int workingHours, string department)
         {
             this.PersonnelId = personnelId;
             this.Name = name;
@@ -30,9 +32,32 @@ namespace WebApplication.Models
             this.ZipCode = zipCode;
             this.JoinedDate = joinedDate;
             this.WorkingHours = workingHours;
-            this.GrossIncome = grossIncome;
             this.Department = department;
+            this.Salaries = new List<Salary>();
         }            
         
+        //public static DataTable createDataTable()
+        //{
+        //    DataTable dt = new DataTable();
+        //    foreach (DataGridViewColumn column in dataGridView1.Columns)
+        //    {
+        //        dt.Columns.Add(column.HeaderText, column.ValueType);
+        //    }
+        //    foreach (DataGridViewRow row in dataGridView1.Rows)
+        //    {
+        //        dt.Rows.Add();
+        //        foreach (DataGridViewCell cell in row.Cells)
+        //        {
+        //            dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
+        //        }
+        //    }
+        //    return dt;
+        //}
+
+        public void Add(Salary salary)
+        {
+            Salaries.Add(salary);
+        }
+
     }
 }

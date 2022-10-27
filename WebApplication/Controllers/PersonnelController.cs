@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Data;
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication.data;
 using WebApplication.Models;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApplication.Controllers
 {
@@ -17,139 +10,58 @@ namespace WebApplication.Controllers
     [ApiController]
     public class PersonnelController : ControllerBase
     {
-        private readonly IConfiguration _config;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PersonnelController(IConfiguration config, IWebHostEnvironment webHostEnvironment)
-        {
-            _config = config;
-            _webHostEnvironment = webHostEnvironment;
-        }
+        private IPersonnelRepository repository;
 
         public PersonnelController()
         {
+            this.repository = new PersonnelRepository();
         }
 
+        // GET: api/<MainController>
         [HttpGet]
-        public JsonResult Get()
+        public IActionResult Get()
         {
-            string query = @"
-                            select PersonnelId, Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkingHours,GrossIncome, Department
-                            from dbo.Employee";
-            DataTable dt = new DataTable();
-            string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-            {
-                myConn.Open();
-                using (SqlCommand myCommand = new SqlCommand(query,myConn))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    dt.Load(myReader);
-                    myReader.Close();
-                    myConn.Close();
-                }
-            }
-            return new JsonResult(dt);
+            return Ok(repository.GetAll());
         }
-        
+
+        // GET api/<MainController>/5
+        [HttpGet("salaries/{id}")]
+        public IActionResult Get(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest("Id Personnel parameter is required");
+            }
+
+
+            return Ok(repository.GetSalariesById(id));
+        }
+
+        // POST api/<MainController>
         [HttpPost]
-        public JsonResult Post(Personnel per)
+        public IActionResult Post([FromBody] Personnel personnel)
         {
-            string query = @"
-                             insert into dbo.Personnel 
-                             (Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkingHours,GrossIncome, Department)
-                             values (@Name, @Surname, @Birthdate, @Adress, @ZipCode, @JoinedDate, @WorkingHours, @GrossIncome, @Department)";
-            
-            DataTable dt = new DataTable();
-            string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+            if (personnel == null)
             {
-                myConn.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                {
-                    myCommand.Parameters.AddWithValue("@Name", per.Name);
-                    myCommand.Parameters.AddWithValue("@Surname", per.Surname);
-                    myCommand.Parameters.AddWithValue("@Birthdate", per.Birthdate);
-                    myCommand.Parameters.AddWithValue("@Adress", per.Adress);
-                    myCommand.Parameters.AddWithValue("@ZipCode", per.ZipCode);
-                    myCommand.Parameters.AddWithValue("@JoinedDate", per.JoinedDate);
-                    myCommand.Parameters.AddWithValue("@WorkingHours", per.WorkingHours);
-                    myCommand.Parameters.AddWithValue("@GrossIncome", per.GrossIncome);
-                    myCommand.Parameters.AddWithValue("@Department", per.Department);
-                    myReader = myCommand.ExecuteReader();
-                    dt.Load(myReader);
-                    myReader.Close();
-                    myConn.Close();
-                }
+                return BadRequest("Parameter Personnel is required");
             }
 
-                return new JsonResult("Added Successfully");
+            bool result = repository.Create(personnel);
+            return Ok(result);
+
         }
 
-        [HttpPut]
-        public JsonResult Put(Personnel per)
+        // PUT api/<MainController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
         {
-            string query = @"
-                           update dbo.Personnel
-                           set Name=@Name, Surname=@Surname, Birthdate=@Birthdate, Adress=@Adress, ZipCode=@ZipCode, 
-                           JoinedDate=@JoinedDate, WorkingHours=@WorkingHours,
-                           GrossIncome=@GrossIncome, Department=@Department                           
-                           where PersonnelId=@PersonnelId";
-
-            DataTable dt = new DataTable();
-            string sqlDataSource = _config.GetConnectionString("EmployeeAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-            {
-                myConn.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                {
-                    myCommand.Parameters.AddWithValue("@PersonnelId", per.PersonnelId);
-                    myCommand.Parameters.AddWithValue("@Surname", per.Surname);
-                    myCommand.Parameters.AddWithValue("@Birthdate", per.Birthdate);
-                    myCommand.Parameters.AddWithValue("@Adress", per.Adress);
-                    myCommand.Parameters.AddWithValue("@ZipCode", per.ZipCode);
-                    myCommand.Parameters.AddWithValue("@JoinedDate", per.JoinedDate);
-                    myCommand.Parameters.AddWithValue("@WorkingHours", per.WorkingHours);
-                    myCommand.Parameters.AddWithValue("@GrossIncome", per.GrossIncome);
-                    myCommand.Parameters.AddWithValue("@Department", per.Department);
-                    myReader = myCommand.ExecuteReader();
-                    dt.Load(myReader);
-                    myReader.Close();
-                    myConn.Close();
-                }
-            }
-            return new JsonResult("Updated Successfully");
         }
-        
+
+        // DELETE api/<MainController>/5
         [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
+        public void Delete(int id)
         {
-            string query = @"
-                           delete from dbo.Personnel
-                            where PersonnelId=@PersonnelId
-                            ";
-
-            DataTable dt = new DataTable();
-            string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myConn = new SqlConnection(sqlDataSource))
-            {
-                myConn.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myConn))
-                {
-                    myCommand.Parameters.AddWithValue("@PersonnelId", id);
-
-                    myReader = myCommand.ExecuteReader();
-                    dt.Load(myReader);
-                    myReader.Close();
-                    myConn.Close();
-                }
-            }
-
-            return new JsonResult("Deleted Successfully");
         }
     }
 }
