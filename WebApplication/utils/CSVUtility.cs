@@ -20,7 +20,7 @@ namespace WebApplication.utils
             table.Columns.Add("YEAR", typeof(int));
             table.Columns.Add("NET INCOME", typeof(double));
 
-            table.ToCSV("Salary.csv"); // PREGUNTAR 
+            table.ToCSV("C:\\Users\\Usuario\\Downloads"); // PREGUNTAR 
             //data  
             for (int i = 0; i < salary.SalaryItems.Count; i++)
                 table.Rows.Add(personnel.Name, personnel.Surname, salary.GrossIncome, salary.Month, salary.Year, salary.NetIncome());

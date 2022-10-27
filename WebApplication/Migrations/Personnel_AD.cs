@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Data;
 using WebApplication.Models;
+using Chilkat;
 
 namespace WebApplication.Migrations
 {
@@ -23,8 +24,8 @@ namespace WebApplication.Migrations
         {
             string query = @"
                              insert into dbo.Personnel 
-                             (Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkingHours,GrossIncome, Department)
-                             values (@Name, @Surname, @Birthdate, @Adress, @ZipCode, @JoinedDate, @WorkingHours, @GrossIncome, @Department)";
+                             (Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkHours, Department)
+                             values (@Name, @Surname, @Birthdate, @Adress, @ZipCode, @JoinedDate, @WorkHours, @GrossIncome, @Department)";
 
             DataTable dt = new DataTable();
             string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
@@ -40,8 +41,7 @@ namespace WebApplication.Migrations
                     myCommand.Parameters.AddWithValue("@Adress", per.Adress);
                     myCommand.Parameters.AddWithValue("@ZipCode", per.ZipCode);
                     myCommand.Parameters.AddWithValue("@JoinedDate", per.JoinedDate);
-                    myCommand.Parameters.AddWithValue("@WorkingHours", per.WorkingHours);
-                   
+                    myCommand.Parameters.AddWithValue("@WorkHours", per.WorkingHours);
                     myCommand.Parameters.AddWithValue("@Department", per.Department);
                     myReader = myCommand.ExecuteReader();
                     dt.Load(myReader);
@@ -59,8 +59,8 @@ namespace WebApplication.Migrations
             string query = @"
                            update dbo.Personnel
                            set Name=@Name, Surname=@Surname, Birthdate=@Birthdate, Adress=@Adress, ZipCode=@ZipCode, 
-                           JoinedDate=@JoinedDate, WorkingHours=@WorkingHours,
-                           GrossIncome=@GrossIncome, Department=@Department                           
+                           JoinedDate=@JoinedDate, WorkHours=@WorkHours,
+                           Department=@Department                           
                            where PersonnelId=@PersonnelId";
 
             DataTable dt = new DataTable();
@@ -77,7 +77,7 @@ namespace WebApplication.Migrations
                     myCommand.Parameters.AddWithValue("@Adress", per.Adress);
                     myCommand.Parameters.AddWithValue("@ZipCode", per.ZipCode);
                     myCommand.Parameters.AddWithValue("@JoinedDate", per.JoinedDate);
-                    myCommand.Parameters.AddWithValue("@WorkingHours", per.WorkingHours);
+                    myCommand.Parameters.AddWithValue("@WorkHours", per.WorkingHours);
                     myCommand.Parameters.AddWithValue("@Department", per.Department);
                     myReader = myCommand.ExecuteReader();
                     dt.Load(myReader);
