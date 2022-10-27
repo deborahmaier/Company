@@ -4,6 +4,10 @@ namespace WebApplication.Models
 {
     public class Salary
     {
+        public Salary()
+        {
+        }
+
         public Salary(int salaryId, double grossIncome, int month, int year)
         {
             SalaryId = salaryId;

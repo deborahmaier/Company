@@ -34,8 +34,11 @@ namespace WebApplication.Models
             this.WorkingHours = workingHours;
             this.Department = department;
             this.Salaries = new List<Salary>();
-        }            
-        
+        }
+
+        public Personnel()
+        {
+        }
 
         public void Add(Salary salary)
         {
