@@ -44,9 +44,7 @@ namespace WebApplication.Controllers
         {
 
             if (personnel == null)
-            {
                 return BadRequest("Parameter Personnel is required");
-            }
 
             bool result = repository.Create(personnel);
             return Ok(result);
@@ -54,15 +52,30 @@ namespace WebApplication.Controllers
         }
 
         // PUT api/<MainController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public IActionResult Put([FromBody] Personnel personnel)
         {
+            if (personnel == null)
+                return BadRequest("Parameter Personnel is required");
+
+            bool result = repository.Update(personnel);
+            return Ok(result);
         }
 
+        //// DELETE api/<MainController>/5
+        //[HttpDelete/*("\"{id}\"")*/]
+        //public IActionResult Delete([FromBody] Personnel personnel/*int PersonnelId*/)
+        //{
+        //    bool result = repository.Delete(personnel.PersonnelId/*PersonnelId*/);
+        //    return Ok(result);
+        //}
         // DELETE api/<MainController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        [HttpDelete("{PersonnelId}")]
+        public IActionResult Delete(int PersonnelId)
         {
+            bool result = repository.Delete(PersonnelId);
+            return Ok(result);
         }
     }
 }

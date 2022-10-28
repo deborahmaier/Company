@@ -88,7 +88,7 @@ namespace WebApplication.Migrations
             return new JsonResult("Updated Successfully");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{PersonnelId}")]
         public JsonResult Delete(int id)
         {
             string query = @"

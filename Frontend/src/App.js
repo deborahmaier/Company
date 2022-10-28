@@ -68,9 +68,15 @@ function App() {
   const [JoinedDate, setJoinedDate] = useState('');
   const [WorkingHours, setWorkingHours] = useState('');
   const [ZipCode, setZipCode] = useState('');
-  const [Salaries, setSalaries] = useState([]);
-
-  const [inputSalary, setInputSalary] = useState('');
+  
+  const getAllPersonnel = useCallback(async () => {
+      const response = await axios.get(API_URL);
+      const { data } = response;
+      console.log(data);
+      setRows(data);
+  }, [
+    
+  ]);
 
   const onAdd = useCallback(async () => {
     const requestBody = {
@@ -81,11 +87,13 @@ function App() {
       Department,
       JoinedDate,
       WorkHours: WorkingHours,
-      ZipCode,
-      Salaries: [inputSalary],
+      ZipCode     
     };
     const response = await axios.post(API_URL, requestBody);
     console.log(response);
+    await getAllPersonnel();
+    setSelectedEmployee(null);
+    setOpenAddModal(false);
   }, [
     Name,
     Surname,
@@ -94,14 +102,36 @@ function App() {
     Department,
     JoinedDate,
     WorkingHours,
-    ZipCode,
-    inputSalary,
+    ZipCode
   ]);
 
-  const onUpdate = useCallback(() => {
-    console.log('Update', selectedEmployee);
+  const onUpdate =  useCallback(async() => {
+    const requestBody = {
+      PersonnelId: selectedEmployee.PersonnelId,
+      Name,
+      Surname,
+      Birthdate,
+      Adress,
+      Department,
+      JoinedDate,
+      WorkingHours,
+      ZipCode     
+    };
+    const response = await axios.put(API_URL, requestBody);
+    console.log(response);
+    await getAllPersonnel();
+    setSelectedEmployee(null);
+    setOpenAddModal(false);
   }, [
     selectedEmployee,
+    Name,
+    Surname,
+    Birthdate,
+    Adress,
+    Department,
+    JoinedDate,
+    WorkingHours,
+    ZipCode
   ]);
 
   const onDelete = useCallback(async () => {
@@ -159,13 +189,10 @@ function App() {
 
   useEffect(() => {
     const init = async () => {
-      const response = await axios.get(API_URL);
-      const { data } = response;
-      console.log(data);
-      setRows(data);
+      await getAllPersonnel();
     }
     init();
-  }, []);
+  }, [getAllPersonnel]);
 
   useEffect(() => {
     const {
@@ -175,7 +202,6 @@ function App() {
       Adress = '',
       Department = '',
       JoinedDate = '',
-      Salaries = [],
       WorkingHours = '',
       ZipCode = '',
     } = selectedEmployee || {};
@@ -187,9 +213,7 @@ function App() {
     setJoinedDate(JoinedDate);
     setWorkingHours(WorkingHours);
     setZipCode(ZipCode);
-    setSalaries(Salaries);
 
-    setInputSalary(Salaries[Salaries.length]);
   }, [selectedEmployee]);
 
   const addModalTitle = selectedEmployee ? 'Update employee' : 'Add employee';
@@ -263,11 +287,6 @@ function App() {
             value={ZipCode}
             onChange={(e) => setZipCode(e.target.value)}
             label='Zip Code'
-          />
-          <TextField
-            value={inputSalary}
-            onChange={(e) => setInputSalary(e.target.value)}
-            label='Gross Salary'
           />
           <Button
             variant='contained'

@@ -30,15 +30,13 @@ namespace WebApplication.Models
         {
             SalaryItems.Add(item);
         }
-
-
         public double NetIncome()
         {
             double aux = 0;
 
             foreach(SalaryItem salaryItem in SalaryItems)
             {
-                if(salaryItem.Tax.TaxType.Equals("r"))
+                if(salaryItem.Tax.TaxType.Equals(""))
                     aux -= salaryItem.Amount;
                 if (salaryItem.Tax.TaxType.Equals("CNR") || salaryItem.Tax.TaxType.Equals("CR"))
                     aux += salaryItem.Amount;
