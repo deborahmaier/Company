@@ -68,3 +68,42 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# Getting Started with ASP.NET
+
+support the salary admin of a small company. This department has two main responsibilities:
+•	Capturing the details of new employees
+•	Exporting a csv with the calculated salary of each employee
+For the current employees, at least the following information is stored in the database:
+•	First name
+•	Last name
+•	Age 
+•	Salary history
+The solution should contain logic to calculate the net salary based on the gross salary. Do this based on factors such as working week hours, pension contribution, et cetera
+
+
+## Data Base
+
+In the database folder, you will find 4 tables, personnel, salary, tax and salary items.
+To calculate the net salary the formula is used: gross salary - taxes.
+
+## Web Application
+
+### `Controllers`
+
+You will find the Personnel controller, in which you may found the endpoints to be able to link the back with the front.
+
+### `data`
+
+You will find the staff mapper and the staff interface. 
+
+### `Models`
+
+You will find the respective personnel, salary, salaryItem and tax classes. 
+
+### `utils`
+
+You are going to find the CSV Utility class where you create the csv. The endpoint is not implemented, therefore the download button does not work.
+
+
