@@ -39,10 +39,7 @@ namespace WebApplication.Models
         {
         }
 
-        /*public void Add(Salary salary)
-        {
-            Salaries.Add(salary);
-        }*/
+   
 
     }
 }
