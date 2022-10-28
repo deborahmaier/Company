@@ -17,9 +17,9 @@ namespace WebApplication.Models
         public string ZipCode { get; set; }
         public DateTime JoinedDate { get; set; }
         public int WorkingHours { get; set; }
-        public string Department { get; set; }
-
-        public List<Salary> Salaries { get; set; }
+        public string Department { get; set; }        
+        public double GrossIncome { get; set; }
+        //public List<Salary> Salaries { get; set; }
 
 
         public Personnel(int personnelId, string name, string surname, DateTime birthdate, string adress, string zipCode, DateTime joinedDate, int workingHours, string department)
@@ -33,17 +33,16 @@ namespace WebApplication.Models
             this.JoinedDate = joinedDate;
             this.WorkingHours = workingHours;
             this.Department = department;
-            this.Salaries = new List<Salary>();
         }
 
         public Personnel()
         {
         }
 
-        public void Add(Salary salary)
+        /*public void Add(Salary salary)
         {
             Salaries.Add(salary);
-        }
+        }*/
 
     }
 }

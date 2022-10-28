@@ -23,11 +23,10 @@ namespace WebApplication.data
             string query = @"
                              insert into dbo.Personnel 
                              (Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkHours, Department)
-                             values (@Name, @Surname, @Birthdate, @Adress, @ZipCode, @JoinedDate, @WorkingHours, @Department)";
+                             values (@Name, @Surname, @Birthdate, @Adress, @ZipCode, @JoinedDate, @WorkingHours, @Department)
+                             ";
 
-            //string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
             string sqlDataSource = connectionString;
-            SqlDataReader myReader;
             using (SqlConnection myConn = new SqlConnection(sqlDataSource))
             {
                 myConn.Open();
@@ -50,7 +49,7 @@ namespace WebApplication.data
 
         public List<Personnel> GetAll()
         {
-            List<Personnel> lst = new List<Personnel>();
+            List<Personnel> lst = null;
             string query = @"
                             select PersonnelId, Name, Surname, Birthdate, Adress, ZipCode, JoinedDate, WorkHours, Department
                             from dbo.Personnel";
@@ -63,25 +62,28 @@ namespace WebApplication.data
                 myConn.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myConn))
                 {
-
-                    myReader = myCommand.ExecuteReader();
-                    while (myReader.Read())
+                    if (myCommand != null)
                     {
-                        //Map registry to Personnel Object
-                        int personnelId = int.Parse(myReader["PersonnelId"].ToString());
-                        string name = myReader["Name"].ToString();
-                        string surname = myReader["Surname"].ToString();
-                        DateTime birthdate = DateTime.Parse(myReader["Birthdate"].ToString());
-                        string adress = myReader["Adress"].ToString();
-                        string zipCode = myReader["ZipCode"].ToString();
-                        DateTime joinedDate = DateTime.Parse(myReader["JoinedDate"].ToString());
-                        int workingHours = int.Parse(myReader["WorkHours"].ToString());
-                        string department = myReader["Department"].ToString();
+                        lst = new List<Personnel>();
+                        myReader = myCommand.ExecuteReader();
+                        while (myReader.Read())
+                        {
+                            //Map registry to Personnel Object
+                            int personnelId = Convert.ToInt32(myReader["PersonnelId"].ToString());
+                            string name = myReader["Name"].ToString();
+                            string surname = myReader["Surname"].ToString();
+                            DateTime birthdate = DateTime.Parse(myReader["Birthdate"].ToString());
+                            string adress = myReader["Adress"].ToString();
+                            string zipCode = myReader["ZipCode"].ToString();
+                            DateTime joinedDate = DateTime.Parse(myReader["JoinedDate"].ToString());
+                            int workingHours = Convert.ToInt32(myReader["WorkHours"].ToString());
+                            string department = myReader["Department"].ToString();
 
-                        lst.Add(new Personnel(personnelId, name, surname, birthdate, adress, zipCode, joinedDate, workingHours, department));
+                            lst.Add(new Personnel(personnelId, name, surname, birthdate, adress, zipCode, joinedDate, workingHours, department));
 
+                        }
+                        myReader.Close();
                     }
-                    myReader.Close();
                 }
             }
             return lst;
@@ -151,12 +153,12 @@ namespace WebApplication.data
 
             int rows = 0;
             string query = @"
-                             UPDATE dbo.Personnel SET Name = @Name, Surname = @Surname , Birthdate = @Birthdate, Adress = @Adress
-                                ,ZipCode = @ZipCode, JoinedDate = @JoinedDate , WorkHours = @WorkingHours, Department = @Department)";
+                             UPDATE dbo.Personnel 
+                             SET Name = @Name, Surname = @Surname , Birthdate = @Birthdate, Adress = @Adress
+                                ,ZipCode = @ZipCode, JoinedDate = @JoinedDate , WorkHours = @WorkingHours, Department = @Department
+                             WHERE PersonnelId = @PersonnelId ";
 
-            //string sqlDataSource = _config.GetConnectionString("PersonnelAppCon");
             string sqlDataSource = connectionString;
-            SqlDataReader myReader;
             using (SqlConnection myConn = new SqlConnection(sqlDataSource))
             {
                 myConn.Open();
@@ -170,6 +172,27 @@ namespace WebApplication.data
                     myCommand.Parameters.AddWithValue("@JoinedDate", oPersonnel.JoinedDate);
                     myCommand.Parameters.AddWithValue("@WorkingHours", oPersonnel.WorkingHours);
                     myCommand.Parameters.AddWithValue("@Department", oPersonnel.Department);
+                    myCommand.Parameters.AddWithValue("@PersonnelId", oPersonnel.PersonnelId);
+                    rows = myCommand.ExecuteNonQuery();
+
+                }
+            }
+            return rows == 1;
+        }
+        public bool Delete (int id)
+        {
+            int rows = 0;
+            string query = @"
+                             DELETE FROM dbo.Personnel WHERE personnelId = @personnelId";
+
+            string sqlDataSource = connectionString;
+            using (SqlConnection myConn = new SqlConnection(sqlDataSource))
+            {
+                myConn.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                {
+                    myCommand.Parameters.Clear();
+                    myCommand.Parameters.AddWithValue("@personnelId", id);
                     rows = myCommand.ExecuteNonQuery();
 
                 }

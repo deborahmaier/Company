@@ -11,5 +11,6 @@ namespace WebApplication.data
         List<Salary> GetSalariesById(int id);
 
         bool Update(Personnel oPersonnel);
+        bool Delete(int id);
     }
 }
