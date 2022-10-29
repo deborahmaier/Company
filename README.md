@@ -72,7 +72,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 # Getting Started with ASP.NET
 
-support the salary admin of a small company. This department has two main responsibilities:
+Support the salary admin of a small company. This department has two main responsibilities:
 •	Capturing the details of new employees
 •	Exporting a csv with the calculated salary of each employee
 For the current employees, at least the following information is stored in the database:
